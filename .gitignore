@@ -1,0 +1,23 @@
+node_modules/
+dist/
+.env
+*.log
+.turbo/
+.cache/
+.DS_Store
+Thumbs.db
+.claude/
+
+# Capacitor auto-generated config
+packages/frontend/capacitor.config.json
+
+# Android build outputs
+packages/frontend/android/app/build/
+packages/frontend/android/build/
+packages/frontend/android/.gradle/
+packages/frontend/android/local.properties
+*.apk
+*.aab
+
+# Auto-generated PWA icons
+packages/frontend/public/icon-*.png

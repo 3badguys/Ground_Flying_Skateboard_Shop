@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: skateboard-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: skateboard_shop
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./packages/backend
+      target: production
+    container_name: skateboard-backend
+    restart: unless-stopped
+    expose:
+      - "3000"
+    environment:
+      DATABASE_URL: "postgresql://postgres:admin123@postgres:5432/skateboard_shop"
+      PORT: 3000
+    command: >
+      sh -c "npx prisma migrate deploy && node dist/main"
+    depends_on:
+      postgres:
+        condition: service_started
+
+  frontend:
+    build:
+      context: ./packages/frontend
+      target: production
+    container_name: skateboard-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: skateboard-ngrok
+    restart: unless-stopped
+    profiles: [optional]
+    ports:
+      - "4040:4040"
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    command: http frontend:80
+    depends_on:
+      - frontend
+
+volumes:
+  pg_data:

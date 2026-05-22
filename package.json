@@ -1,0 +1,26 @@
+{
+  "name": "ground-flying-skateboard-shop",
+  "private": true,
+  "workspaces": [
+    "packages/backend",
+    "packages/frontend"
+  ],
+  "scripts": {
+    "dev:backend": "cd packages/backend && npm run start:dev",
+    "dev:frontend": "cd packages/frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build:backend": "cd packages/backend && npm run build",
+    "build:frontend": "cd packages/frontend && npm run build",
+    "build": "npm run build:backend && npm run build:frontend",
+    "db:migrate": "cd packages/backend && npx prisma migrate dev",
+    "db:generate": "cd packages/backend && npx prisma generate",
+    "db:seed": "cd packages/backend && npx prisma db seed",
+    "infra:up": "docker compose up -d",
+    "infra:down": "docker compose down",
+    "sync:config": "node scripts/sync-config.cjs",
+    "app:build": "npm run sync:config && cd packages/frontend && npm run build && npx cap sync android"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}

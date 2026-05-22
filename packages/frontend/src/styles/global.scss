@@ -1,0 +1,88 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.el-button:focus-visible,
+.el-tabs__item:focus-visible,
+.el-table__body tr:focus-visible,
+.el-table__expanded-cell:focus-visible,
+.el-table:focus-visible,
+.el-table__inner-wrapper:focus-visible,
+.el-table__body-wrapper:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+.el-tabs__header {
+  margin-bottom: 12px;
+}
+
+// Remove white box around expanded table rows
+.el-table__expanded-cell {
+  padding: 0 !important;
+  background: #f0f2f5 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.el-table__expand-column .cell {
+  padding: 0 !important;
+}
+
+// Prevent body padding shift when dialog opens
+.el-popup-parent--hidden {
+  overflow: hidden !important;
+  padding-right: 0 !important;
+}
+
+// Remove all outlines from tables
+.el-table * {
+  outline: none !important;
+}
+
+
+
+html, body, #app {
+  height: 100%;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+}
+
+// Responsive breakpoints
+@media (max-width: 768px) {
+  .el-table {
+    font-size: 12px;
+  }
+
+  .el-table__body-wrapper {
+    overflow-x: auto;
+  }
+
+  .el-dialog {
+    width: 90% !important;
+  }
+
+  .el-drawer {
+    width: 100% !important;
+  }
+
+  .el-drawer__body {
+    overflow-x: hidden;
+  }
+
+  .el-form-item__label {
+    font-size: 13px;
+  }
+
+  .el-button {
+    min-height: 36px;
+    min-width: 44px;
+  }
+
+  .el-input__inner,
+  .el-select .el-input__inner {
+    font-size: 16px; // prevent iOS zoom on focus
+  }
+}
