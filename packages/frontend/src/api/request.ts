@@ -1,8 +1,13 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
+// In browser: always use /api (goes through Nginx/Vite proxy)
+// In Capacitor native app: use __API_BASE__ to reach backend directly
+const isNative = !!(window as any).Capacitor;
+const apiBase = isNative ? ((window as any).__API_BASE__ || '/api') : '/api';
+
 const request = axios.create({
-  baseURL: '/api',
+  baseURL: apiBase,
   timeout: 30000,
 })
 

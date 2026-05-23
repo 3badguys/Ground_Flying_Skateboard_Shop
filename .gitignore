@@ -21,3 +21,6 @@ packages/frontend/android/local.properties
 
 # Auto-generated PWA icons
 packages/frontend/public/icon-*.png
+
+# Auto-generated API config
+packages/frontend/public/api-config.js

@@ -74,16 +74,14 @@ Ground_Flying_Skateboard_Shop/
 ### 1. 启动服务
 
 ```bash
-# 复制配置文件
-copy .env.example .env
-
 # 生产模式（推荐）
-docker compose up -d --build
+npm run start
 
 # 开发模式（代码热重载）
-docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+npm run start:dev
 ```
 
+首次运行会自动查 IP、生成 `.env`、构建镜像并启动。
 浏览器打开 `http://localhost:5173` 即可访问。
 
 如果需要外网访问（手机 PWA 测试等），额外启动 ngrok：
@@ -95,12 +93,13 @@ docker logs skateboard-ngrok  # 获取公网 URL
 
 ### 2. 配置文件 .env
 
-```
-NGROK_AUTHTOKEN=你的ngrok令牌      # 可选，用于公网访问
-CAPACITOR_URL=http://你的IP:5173   # 生成 APK 时使用
-```
+首次运行 `npm run start` 会自动生成，后续也可手动编辑。需要外网访问时手动填入 ngrok token：
 
-改完 `.env` 后无需其他操作，docker-compose 会自动读取。
+```
+NGROK_AUTHTOKEN=你的ngrok令牌    # 可选，用于外网 HTTPS 访问
+CAPACITOR_URL=http://你的IP:5173 # 可选，App 远程模式（壳加载此地址）
+API_BASE_URL=http://你的IP:3000  # 可选，App 本地模式（直连后端）
+```
 
 ### 3. 生成 Android APK
 
@@ -134,7 +133,7 @@ APK 路径：`packages/frontend/android/app/build/outputs/apk/debug/app-debug.ap
 
 ```bash
 # 停止服务
-docker compose down
+npm run stop
 
 # 查看日志
 docker compose logs -f backend
