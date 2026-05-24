@@ -28,14 +28,18 @@ const env = parseEnv(envPath);
 
 // Generate capacitor.config.json
 const url = env.CAPACITOR_URL;
+const useRemote = !!url;
 const config = {
   appId: 'com.skateboard.shop',
   appName: '地面飞行滑板',
   webDir: 'dist',
-  server: {
-    url: url.replace(/\/$/, ''),
-    cleartext: url.startsWith('http://'),
-  },
+  ...(useRemote ? {
+    server: {
+      url: url.replace(/\/$/, ''),
+      cleartext: !url.startsWith('https'),
+      androidScheme: url.startsWith('https') ? 'https' : 'http',
+    },
+  } : {}),
 };
 
 // Write capacitor.config.json

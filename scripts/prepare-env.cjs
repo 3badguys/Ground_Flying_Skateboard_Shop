@@ -37,8 +37,12 @@ const ip = getLocalIP();
 console.log(`First run — detected IP: ${ip}`);
 
 let content = fs.readFileSync(examplePath, 'utf-8');
-content = content.replace(/^CAPACITOR_URL=.*/m, `CAPACITOR_URL=http://${ip}:5173`);
-content = content.replace(/^API_BASE_URL=.*/m, `API_BASE_URL=http://${ip}:3000`);
+content = content.replace(/^API_BASE_URL=.*/m, `API_BASE_URL=http://${ip}:5173`);
+if (mode === 'dev') {
+  content = content.replace(/^CAPACITOR_URL=.*/m, `CAPACITOR_URL=http://${ip}:5173`);
+} else {
+  content = content.replace(/^CAPACITOR_URL=.*/m, `CAPACITOR_URL=`);
+}
 
 fs.writeFileSync(envPath, content);
 console.log('.env generated — edit it freely, it won\'t be overwritten');

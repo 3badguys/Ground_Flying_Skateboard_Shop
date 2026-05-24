@@ -19,8 +19,5 @@ packages/frontend/android/local.properties
 *.apk
 *.aab
 
-# Auto-generated PWA icons
-packages/frontend/public/icon-*.png
-
 # Auto-generated API config
 packages/frontend/public/api-config.js

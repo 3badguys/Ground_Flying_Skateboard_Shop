@@ -1,10 +1,10 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
-// In browser: always use /api (goes through Nginx/Vite proxy)
-// In Capacitor native app: use __API_BASE__ to reach backend directly
-const isNative = !!(window as any).Capacitor;
-const apiBase = isNative ? ((window as any).__API_BASE__ || '/api') : '/api';
+// Capacitor local mode (capacitor:// or file://): use __API_BASE__ to reach backend
+// Remote/Dev/Prod (http:// or https://): use /api through Nginx/Vite proxy
+const isLocalApp = !!(window as any).Capacitor && !window.location.protocol.startsWith('http');
+const apiBase = isLocalApp ? ((window as any).__API_BASE__ || '/api') : '/api';
 
 const request = axios.create({
   baseURL: apiBase,

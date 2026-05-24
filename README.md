@@ -98,7 +98,7 @@ docker logs skateboard-ngrok  # 获取公网 URL
 ```
 NGROK_AUTHTOKEN=你的ngrok令牌    # 可选，用于外网 HTTPS 访问
 CAPACITOR_URL=http://你的IP:5173 # 可选，App 远程模式（壳加载此地址）
-API_BASE_URL=http://你的IP:3000  # 可选，App 本地模式（直连后端）
+API_BASE_URL=http://你的IP:5173  # 可选，App 本地模式（Nginx 代理 `/api`）
 ```
 
 ### 3. 生成 Android APK
