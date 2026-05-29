@@ -1,5 +1,5 @@
 services:
-  postgres:
+  skateboard-postgres:
     image: postgres:16-alpine
     container_name: skateboard-postgres
     restart: unless-stopped
@@ -11,7 +11,7 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
 
-  backend:
+  skateboard-backend:
     build:
       context: ./packages/backend
       target: production
@@ -20,22 +20,22 @@ services:
     expose:
       - "3000"
     environment:
-      DATABASE_URL: "postgresql://postgres:admin123@postgres:5432/skateboard_shop"
+      DATABASE_URL: "postgresql://postgres:admin123@skateboard-postgres:5432/skateboard_shop"
       PORT: 3000
     depends_on:
-      postgres:
+      skateboard-postgres:
         condition: service_started
 
-  frontend:
+  skateboard-frontend:
     build:
       context: ./packages/frontend
       target: production
     container_name: skateboard-frontend
     restart: unless-stopped
     depends_on:
-      - backend
+      - skateboard-backend
 
-  ngrok:
+  skateboard-ngrok:
     image: ngrok/ngrok:latest
     container_name: skateboard-ngrok
     restart: unless-stopped
@@ -44,9 +44,9 @@ services:
       - "4040:4040"
     environment:
       NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
-    command: http frontend:80
+    command: http skateboard-frontend:80
     depends_on:
-      - frontend
+      - skateboard-frontend
 
 volumes:
   pg_data:

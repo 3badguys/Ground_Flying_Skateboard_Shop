@@ -1,5 +1,5 @@
 # Production overrides
 services:
-  frontend:
+  skateboard-frontend:
     ports:
       - "5173:80"

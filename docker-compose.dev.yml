@@ -1,6 +1,6 @@
 # Development overrides — use with: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 services:
-  backend:
+  skateboard-backend:
     build:
       target: development
     ports:
@@ -11,13 +11,13 @@ services:
       - ./packages/backend/src:/app/src
       - ./packages/backend/prisma:/app/prisma
 
-  frontend:
+  skateboard-frontend:
     build:
       target: development
     ports:
       - "5173:5173"
     environment:
-      VITE_API_TARGET: "http://backend:3000"
+      VITE_API_TARGET: "http://skateboard-backend:3000"
     command: npx vite --host 0.0.0.0
     volumes:
       - ./packages/frontend/src:/app/src
