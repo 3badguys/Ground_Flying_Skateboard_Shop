@@ -10,6 +10,8 @@ services:
       - "5432:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
+    networks:
+      - shared_gateway_net
 
   skateboard-backend:
     build:
@@ -25,6 +27,8 @@ services:
     depends_on:
       skateboard-postgres:
         condition: service_started
+    networks:
+      - shared_gateway_net
 
   skateboard-frontend:
     build:
@@ -34,6 +38,8 @@ services:
     restart: unless-stopped
     depends_on:
       - skateboard-backend
+    networks:
+      - shared_gateway_net
 
   skateboard-ngrok:
     image: ngrok/ngrok:latest
@@ -47,6 +53,12 @@ services:
     command: http skateboard-frontend:80
     depends_on:
       - skateboard-frontend
+    networks:
+      - shared_gateway_net
 
 volumes:
   pg_data:
+
+networks:
+  shared_gateway_net:
+    external: true

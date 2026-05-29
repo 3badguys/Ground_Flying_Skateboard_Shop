@@ -71,6 +71,16 @@ Ground_Flying_Skateboard_Shop/
 - Node.js（仅打包 APK 时需要）
 - Android Studio（仅打包 APK 时需要）
 
+### 0. 创建共享网络
+
+项目使用外部共享网络 `shared_gateway_net`，首次部署前需创建：
+
+```bash
+docker network create shared_gateway_net 2>/dev/null || true
+```
+
+只需执行一次，后续所有服务共用。
+
 ### 1. 启动服务
 
 ```bash
