@@ -39,9 +39,11 @@ const config = {
     url: url.replace(/\/$/, ''),
     cleartext: !url.startsWith('https'),
     androidScheme: url.startsWith('https') ? 'https' : 'http',
+    iosScheme: url.startsWith('https') ? 'https' : 'http',
   } : {
     cleartext: !apiBase.startsWith('https'),
     androidScheme: apiBase.startsWith('https') ? 'https' : 'http',
+    iosScheme: apiBase.startsWith('https') ? 'https' : 'http',
   },
 };
 

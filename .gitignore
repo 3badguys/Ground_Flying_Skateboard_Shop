@@ -19,5 +19,10 @@ packages/frontend/android/local.properties
 *.apk
 *.aab
 
+# iOS build outputs
+packages/frontend/ios/build/
+packages/frontend/ios/.build/
+*.ipa
+
 # Auto-generated API config
 packages/frontend/public/api-config.js

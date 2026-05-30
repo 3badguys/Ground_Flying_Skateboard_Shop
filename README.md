@@ -11,7 +11,7 @@
 | 数据库 | PostgreSQL 16 |
 | Web 服务器 | Nginx（生产模式） |
 | 容器化 | Docker Compose |
-| 移动端 | Capacitor（Android APK）+ PWA |
+| 移动端 | Capacitor（Android & IOS）+ PWA |
 
 ## 项目结构
 
@@ -61,15 +61,17 @@ Ground_Flying_Skateboard_Shop/
 - **数据统计** — 月度收入、课时消耗、学生报课柱状/折线图
 - **系统设置** — 课时预警数配置，剩余课时低于阈值标红
 - **PWA** — 手机浏览器添加到桌面，独立窗口运行
-- **Android App** — Capacitor 打包 APK，原生安装
+- **Android & IOS App** — Capacitor 打包 APP，原生安装
 
 ## 快速开始
 
 ### 环境要求
 
-- Docker Desktop
-- Node.js（仅打包 APK 时需要）
+- Docker Engine
+- Docker Compose v2.0+
+- Node.js
 - Android Studio（仅打包 APK 时需要）
+- macOS + Xcode（仅打包 IPA 时需要）
 
 ### 0. 创建共享网络
 
@@ -138,6 +140,12 @@ Build → Build Bundle(s) / APK(s) → Build APK(s)
 ```
 
 APK 路径：`packages/frontend/android/app/build/outputs/apk/debug/app-debug.apk`
+
+**iOS**
+
+生成 iOS 工程后，在 Mac 上用 Xcode 打开 `packages/frontend/ios/App.xcworkspace`，Build 即可。
+
+> iOS 构建需要 macOS + Xcode
 
 ### 4. 常用命令
 
