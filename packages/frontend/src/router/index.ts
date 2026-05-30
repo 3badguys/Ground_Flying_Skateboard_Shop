@@ -5,7 +5,7 @@ import CalendarView from '../views/calendar/CalendarView.vue'
 import StatisticsView from '../views/statistics/StatisticsView.vue'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
