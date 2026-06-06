@@ -3,12 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
-		4D22ABE92AF431CB00220026 /* CapApp-SPM in Frameworks */ = {isa = PBXBuildFile; productRef = 4D22ABE82AF431CB00220026 /* CapApp-SPM */; };
+		4D22ABEA2AF431CB00220027 /* Capacitor in Frameworks */ = {isa = PBXBuildFile; productRef = 4D22ABE92AF431CB00220027 /* Capacitor */; };
+		4D22ABEB2AF431CB00220028 /* Cordova in Frameworks */ = {isa = PBXBuildFile; productRef = 4D22ABEC2AF431CB00220028 /* Cordova */; };
+		4D22ABED2AF431CB00220029 /* CapApp-SPM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D22ABEE2AF431CB00220029 /* CapApp-SPM.swift */; };
 		50379B232058CBB4000EE86E /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = 50379B222058CBB4000EE86E /* capacitor.config.json */; };
 		504EC3081FED79650016851F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504EC3071FED79650016851F /* AppDelegate.swift */; };
 		504EC30D1FED79650016851F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30B1FED79650016851F /* Main.storyboard */; };
@@ -19,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		2FAD9762203C412B000D30F8 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
+		4D22ABEE2AF431CB00220029 /* CapApp-SPM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapApp-SPM.swift; sourceTree = "<group>"; };
 		50379B222058CBB4000EE86E /* capacitor.config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = capacitor.config.json; sourceTree = "<group>"; };
 		504EC3041FED79650016851F /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		504EC3071FED79650016851F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -35,7 +38,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D22ABE92AF431CB00220026 /* CapApp-SPM in Frameworks */,
+				4D22ABEA2AF431CB00220027 /* Capacitor in Frameworks */,
+				4D22ABEB2AF431CB00220028 /* Cordova in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,6 +68,7 @@
 			children = (
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
 				504EC3071FED79650016851F /* AppDelegate.swift */,
+				4D22ABEE2AF431CB00220029 /* CapApp-SPM.swift */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
 				504EC3101FED79650016851F /* LaunchScreen.storyboard */,
@@ -91,7 +96,8 @@
 			);
 			name = App;
 			packageProductDependencies = (
-				4D22ABE82AF431CB00220026 /* CapApp-SPM */,
+				4D22ABE92AF431CB00220027 /* Capacitor */,
+				4D22ABEC2AF431CB00220028 /* Cordova */,
 			);
 			productName = App;
 			productReference = 504EC3041FED79650016851F /* App.app */;
@@ -123,7 +129,7 @@
 			);
 			mainGroup = 504EC2FB1FED79650016851F;
 			packageReferences = (
-				D4C12C0A2AAA248700AAC8A2 /* XCLocalSwiftPackageReference "CapApp-SPM" */,
+				D4C12C0A2AAA248700AAC8A2 /* XCRemoteSwiftPackageReference "capacitor-swift-pm" */,
 			);
 			productRefGroup = 504EC3051FED79650016851F /* Products */;
 			projectDirPath = "";
@@ -156,6 +162,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
+				4D22ABED2AF431CB00220029 /* CapApp-SPM.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,18 +364,27 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		D4C12C0A2AAA248700AAC8A2 /* XCLocalSwiftPackageReference "CapApp-SPM" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "CapApp-SPM";
+/* Begin XCRemoteSwiftPackageReference section */
+		D4C12C0A2AAA248700AAC8A2 /* XCRemoteSwiftPackageReference "capacitor-swift-pm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ionic-team/capacitor-swift-pm.git";
+			requirement = {
+				kind = exactVersion;
+				version = 6.2.1;
+			};
 		};
-/* End XCLocalSwiftPackageReference section */
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		4D22ABE82AF431CB00220026 /* CapApp-SPM */ = {
+		4D22ABE92AF431CB00220027 /* Capacitor */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D4C12C0A2AAA248700AAC8A2 /* XCLocalSwiftPackageReference "CapApp-SPM" */;
-			productName = "CapApp-SPM";
+			package = D4C12C0A2AAA248700AAC8A2 /* XCRemoteSwiftPackageReference "capacitor-swift-pm" */;
+			productName = Capacitor;
+		};
+		4D22ABEC2AF431CB00220028 /* Cordova */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4C12C0A2AAA248700AAC8A2 /* XCRemoteSwiftPackageReference "capacitor-swift-pm" */;
+			productName = Cordova;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

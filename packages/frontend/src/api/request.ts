@@ -7,6 +7,8 @@ const apiBase = (window as any).Capacitor
   ? ((window as any).__API_BASE__ || '/api')
   : '/api';
 
+console.log('[API] Capacitor:', !!(window as any).Capacitor, 'baseURL:', apiBase);
+
 const request = axios.create({
   baseURL: apiBase,
   timeout: 30000,

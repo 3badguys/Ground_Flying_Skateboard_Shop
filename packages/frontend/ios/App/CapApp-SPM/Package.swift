@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 5.7
 import PackageDescription
 
 // DO NOT MODIFY THIS FILE - managed by Capacitor CLI commands
@@ -11,7 +11,7 @@ let package = Package(
             targets: ["CapApp-SPM"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", exact: "8.3.4")
+        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", exact: "6.2.1")
     ],
     targets: [
         .target(

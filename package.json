@@ -19,7 +19,7 @@
     "start:dev": "node scripts/prepare-env.cjs dev && docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build",
     "stop": "docker compose down",
     "sync:config": "node scripts/sync-config.cjs",
-    "app:build": "npm run sync:config && cd packages/frontend && npm install && npm run build && npx cap sync android && npx cap sync ios"
+    "app:build": "npm run sync:config && cd packages/frontend && npm install && npm run build:mobile && npx cap sync android && npx cap sync ios && sed -i '' 's/swift-tools-version: 5.9/swift-tools-version: 5.7/' ios/App/CapApp-SPM/Package.swift"
   },
   "devDependencies": {
     "concurrently": "^9.0.0"
