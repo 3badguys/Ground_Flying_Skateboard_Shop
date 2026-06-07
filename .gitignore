@@ -26,3 +26,13 @@ packages/frontend/ios/.build/
 
 # Auto-generated API config
 packages/frontend/public/api-config.js
+
+# Android Studio IDE
+packages/frontend/android/.idea/
+packages/frontend/android/app/.idea/
+packages/frontend/android/app/.gradle/
+packages/frontend/android/captures/
+
+# Xcode user data
+packages/frontend/ios/App/App.xcodeproj/xcuserdata/
+packages/frontend/ios/App/App.xcodeproj/project.xcworkspace/xcuserdata/
