@@ -50,6 +50,12 @@ html, body, #app {
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
 }
 
+/* iOS safe area — avoid status bar / Dynamic Island overlap */
+body {
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
+}
+
 // Responsive breakpoints
 @media (max-width: 768px) {
   .el-table {

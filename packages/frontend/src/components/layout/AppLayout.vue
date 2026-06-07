@@ -77,6 +77,7 @@ onResize()
   transition: width 0.3s;
   overflow: hidden;
   flex-shrink: 0;
+  padding-top: env(safe-area-inset-top);
 }
 
 .aside-mobile {
@@ -84,6 +85,7 @@ onResize()
   position: fixed;
   left: 0; top: 0; bottom: 0;
   z-index: 100;
+  padding-top: env(safe-area-inset-top);
 }
 
 .aside-open {
