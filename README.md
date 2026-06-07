@@ -184,3 +184,21 @@ PostgreSQL，通过 Prisma ORM 管理，模型定义在 `packages/backend/prisma
 - **course_infos** — 课程报名记录
 - **class_records** — 上课记录
 - **settings** — 系统配置（键值对）
+
+## Nginx proxy_pass 参考
+
+| proxy_pass | 请求 `/gfs/api/students` | 转发给 upstream |
+|---|---|---|
+| `http://upstream;` | 保留原 URI | `/gfs/api/students` |
+| `http://upstream/;` | 剥离匹配的 location 前缀 | `/students` |
+| `http://$upstream;` | 变量禁用自动替换，保留原 URI | `/gfs/api/students` |
+| `http://$upstream/;` | 变量禁用自动替换，保留原 URI | `/gfs/api/students` |
+
+> **核心规则**：如果 proxy_pass 的值包含变量（`$var`），nginx 会跳过 URI 重写，末尾 `/` 不生效。需要手动用 `rewrite` 剥离前缀：
+> ```nginx
+> location /gfs/ {
+>     set $upstream example:80;
+>     rewrite ^/gfs/(.*) /$1 break;
+>     proxy_pass http://$upstream;
+> }
+> ```
