@@ -1,13 +1,11 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
-// In Capacitor: use __API_BASE__ (both local and remote mode)
-// In browser: use /api through Nginx/Vite proxy
+// Capacitor: use __API_BASE__ (full URL for remote API)
+// Browser:   use VITE_BASE + api (relative, matches nginx location)
 const apiBase = (window as any).Capacitor
   ? ((window as any).__API_BASE__ || '/api')
-  : '/api';
-
-console.log('[API] Capacitor:', !!(window as any).Capacitor, 'baseURL:', apiBase);
+  : `${import.meta.env.BASE_URL}api`;
 
 const request = axios.create({
   baseURL: apiBase,
