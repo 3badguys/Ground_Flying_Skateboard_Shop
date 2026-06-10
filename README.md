@@ -121,25 +121,19 @@ docker logs skateboard-ngrok  # 获取公网 URL
 ### 3. 生成 APP
 
 ```bash
-npm run app:build
+npm run app:build:android   # Windows / Linux / Mac
+npm run app:build:ios       # macOS only
 ```
 
-自动完成：编译前端 → 同步 Android 工程。
+**Android**
 
----
+Android Studio → Open `packages/frontend/android` → Build APK
 
-完成后在 Android Studio 中：
-
-```
-File → Open → 选择 packages/frontend/android
-Build → Build Bundle(s) / APK(s) → Build APK(s)
-```
-
-APK 路径：`packages/frontend/android/app/build/outputs/apk/debug/app-debug.apk`
+APK: `packages/frontend/android/app/build/outputs/apk/debug/app-debug.apk`
 
 **iOS**
 
-生成 iOS 工程后，在 Mac 上用 Xcode 打开 `packages/frontend/ios/App.xcworkspace`，Build 即可。
+Xcode → Open `packages/frontend/ios/App.xcworkspace` → Build
 
 > iOS 构建需要 macOS + Xcode
 
