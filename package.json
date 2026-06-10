@@ -6,22 +6,16 @@
     "packages/frontend"
   ],
   "scripts": {
-    "dev:backend": "cd packages/backend && npm run start:dev",
-    "dev:frontend": "cd packages/frontend && npm run dev",
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build": "npm run build:backend && npm run build:frontend",
     "build:backend": "cd packages/backend && npm run build",
     "build:frontend": "cd packages/frontend && npm run build",
-    "build": "npm run build:backend && npm run build:frontend",
     "db:migrate": "cd packages/backend && npx prisma migrate dev",
     "db:generate": "cd packages/backend && npx prisma generate",
     "db:seed": "cd packages/backend && npx prisma db seed",
-    "start": "node scripts/prepare-env.cjs prod && docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build",
-    "start:dev": "node scripts/prepare-env.cjs dev && docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build",
+    "start": "docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d",
+    "start:dev": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d",
     "stop": "docker compose down",
     "sync:config": "node scripts/sync-config.cjs",
-    "app:build": "npm run sync:config && cd packages/frontend && npm run build:mobile && npx cap sync android && npx cap sync ios && git checkout -- android/build.gradle android/app/build.gradle android/gradle/wrapper/gradle-wrapper.properties android/variables.gradle android/settings.gradle && sed -i '' 's/swift-tools-version: 5.9/swift-tools-version: 5.7/' ios/App/CapApp-SPM/Package.swift"
-  },
-  "devDependencies": {
-    "concurrently": "^9.0.0"
+    "app:build": "cd packages/frontend && VITE_BASE=./ npm run build && npx cap sync android && npx cap sync ios && git checkout -- android/build.gradle android/app/build.gradle android/gradle/wrapper/gradle-wrapper.properties android/variables.gradle android/settings.gradle && sed -i '' 's/swift-tools-version: 5.9/swift-tools-version: 5.7/' ios/App/CapApp-SPM/Package.swift"
   }
 }

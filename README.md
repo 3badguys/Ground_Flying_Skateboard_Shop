@@ -83,7 +83,25 @@ docker network create shared_gateway_net 2>/dev/null || true
 
 只需执行一次，后续所有服务共用。
 
-### 1. 启动服务
+### 1. 配置文件 .env
+
+首次部署从 `.env.example` 复制并修改：
+
+```bash
+cp .env.example .env
+```
+
+核心配置：
+
+```
+APP_BASE_URL=https://your-domain.com    # 服务器地址
+VITE_BASE=/gfs/                         # 前端路径前缀
+CAPACITOR_REMOTE=false                  # App 远程模式开关
+```
+
+改完运行 `npm run sync:config` 同步到各子配置。
+
+### 2. 启动服务
 
 ```bash
 # 生产模式（推荐）
@@ -93,9 +111,6 @@ npm run start
 npm run start:dev
 ```
 
-首次运行会自动查 IP、生成 `.env`、构建镜像并启动。
-浏览器打开 `http://localhost:5173` 即可访问。
-
 如果需要外网访问（手机 PWA 测试等），额外启动 ngrok：
 
 ```bash
@@ -103,36 +118,17 @@ docker compose --profile optional up -d ngrok
 docker logs skateboard-ngrok  # 获取公网 URL
 ```
 
-### 2. 配置文件 .env
-
-首次运行 `npm run start` 会自动生成，后续也可手动编辑。需要外网访问时手动填入 ngrok token：
-
-```
-NGROK_AUTHTOKEN=你的ngrok令牌    # 可选，用于外网 HTTPS 访问
-CAPACITOR_URL=http://你的IP:5173 # 可选，App 远程模式（壳加载此地址）
-API_BASE_URL=http://你的IP:5173  # 可选，App 本地模式（Nginx 代理 `/api`）
-```
-
-### 3. 生成 Android APK
-
-**方式一：一条命令**
+### 3. 生成 APP
 
 ```bash
 npm run app:build
 ```
 
-自动完成：读取 .env 生成配置 → 编译前端 → 同步 Android 工程。
-
-**方式二：分步执行**
-
-```bash
-npm run sync:config                                    # 1. 从 .env 生成配置
-cd packages/frontend && npm run build && npx cap sync android  # 2. 编译 + 同步
-```
+自动完成：编译前端 → 同步 Android 工程。
 
 ---
 
-以上两步任选其一，完成后在 Android Studio 中：
+完成后在 Android Studio 中：
 
 ```
 File → Open → 选择 packages/frontend/android
