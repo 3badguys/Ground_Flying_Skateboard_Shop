@@ -23,4 +23,5 @@ services:
       - ./packages/frontend/src:/app/src
       - ./packages/frontend/index.html:/app/index.html
       - ./packages/frontend/vite.config.ts:/app/vite.config.ts
+      - ./packages/frontend/.env:/app/.env:ro
       - ./packages/frontend/public:/app/public

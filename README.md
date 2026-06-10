@@ -175,6 +175,42 @@ PostgreSQL，通过 Prisma ORM 管理，模型定义在 `packages/backend/prisma
 - **class_records** — 上课记录
 - **settings** — 系统配置（键值对）
 
+## Nginx 网关代理（Dev vs Prod）
+
+| 模式 | Vite base | Nginx 剥离前缀 | 原因 |
+|------|-----------|---------------|------|
+| **Dev** | `/frpc/gfs/` | **不剥离** | Vite 内部路径（HMR、源码、模块）都带 base 前缀，Nginx 原样转发，Vite 自己匹配 |
+| **Prod** | `/frpc/gfs/` | **剥离** | 编译后只有一个 JS/CSS 入口，路径扁平化，Nginx 剥离避免重复前缀 |
+
+```nginx
+# Dev — 不剥离
+location /frpc/gfs/ {
+    proxy_pass http://skateboard-frontend:5173;   # 末尾无 /
+}
+
+# Prod — 剥离
+location /frpc/gfs/ {
+    proxy_pass http://skateboard-frontend:80/;    # 末尾有 /
+}
+```
+
+## Vite 子路径代理
+
+当 `VITE_BASE` 设为 `/frpc/gfs/` 时，Vite proxy 需动态匹配：
+
+```ts
+proxy: base !== '/'
+  ? {
+      [`${base}api/`]: {
+        target: 'http://skateboard-backend:3000',
+        rewrite: (path) => path.replace(/^\/frpc\/gfs\/api/, '/api'),
+      },
+    }
+  : {
+      '/api/': { target: 'http://skateboard-backend:3000' },
+    },
+```
+
 ## Nginx proxy_pass 参考
 
 | proxy_pass | 请求 `/gfs/api/students` | 转发给 upstream |
