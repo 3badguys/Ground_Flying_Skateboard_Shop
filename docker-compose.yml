@@ -4,6 +4,7 @@ services:
     container_name: skateboard-postgres
     restart: unless-stopped
     environment:
+      TZ: ${TIMEZONE:-Asia/Shanghai}
       POSTGRES_PASSWORD: admin123
       POSTGRES_DB: skateboard_shop
     ports:
@@ -22,6 +23,7 @@ services:
     expose:
       - "3000"
     environment:
+      TZ: ${TIMEZONE:-Asia/Shanghai}
       DATABASE_URL: "postgresql://postgres:admin123@skateboard-postgres:5432/skateboard_shop"
       PORT: 3000
     depends_on:
@@ -36,6 +38,8 @@ services:
       target: production
     container_name: skateboard-frontend
     restart: unless-stopped
+    environment:
+      TZ: ${TIMEZONE:-Asia/Shanghai}
     depends_on:
       - skateboard-backend
     networks:
@@ -49,6 +53,7 @@ services:
     ports:
       - "4040:4040"
     environment:
+      TZ: ${TIMEZONE:-Asia/Shanghai}
       NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
     command: http skateboard-frontend:80
     depends_on:
