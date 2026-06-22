@@ -72,6 +72,22 @@ export class BookingService {
         );
       }
 
+      // 检查同一学员同一天同一时段是否已有记录
+      if (dto.startTime || dto.endTime) {
+        const duplicate = await tx.classRecord.findFirst({
+          where: {
+            studentId: dto.studentId,
+            classDate: new Date(dto.classDate),
+            startTime: dto.startTime || null,
+          },
+        });
+        if (duplicate) {
+          throw new BadRequestException(
+            '该学员在当天该时段已有上课记录，请勿重复预约',
+          );
+        }
+      }
+
       return tx.classRecord.create({
         data: {
           studentId: dto.studentId,

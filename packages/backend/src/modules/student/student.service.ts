@@ -237,10 +237,10 @@ export class StudentService {
       const student = await tx.student.create({
         data: {
           name: dto.name,
-          parentName: dto.parentName,
+          parentName: dto.parentName ?? '',
           gender: dto.gender,
           grade: dto.grade,
-          phone: dto.phone,
+          phone: dto.phone ?? '',
           enrollmentDate: new Date(dto.enrollmentDate),
         },
       });

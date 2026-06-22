@@ -138,6 +138,29 @@ export class StatisticsService {
     return monthly;
   }
 
+  // 6. Annual summary (yearly totals)
+  async annualSummary(year: number) {
+    const monthlyIncome = await this.monthlyIncome(year);
+    const monthlyHours = await this.monthlyHours(year);
+    const monthlyEnrollment = await this.monthlyEnrollment(year);
+
+    const enrollmentIncome = monthlyIncome.reduce((s, m) => s + m.income, 0);
+    const completedIncome = monthlyIncome.reduce((s, m) => s + m.completed, 0);
+    const enrollmentHours = monthlyHours.reduce((s, m) => s + m.enrolled, 0);
+    const completedHours = monthlyHours.reduce((s, m) => s + m.completed, 0);
+    const newStudents = monthlyEnrollment.reduce((s, m) => s + m.newStudents, 0);
+    const continuingStudents = monthlyEnrollment.reduce((s, m) => s + m.continuing, 0);
+
+    return {
+      enrollmentIncome: Math.round(enrollmentIncome * 100) / 100,
+      completedIncome: Math.round(completedIncome * 100) / 100,
+      enrollmentHours,
+      completedHours,
+      newStudents,
+      continuingStudents,
+    };
+  }
+
   // 4. Student rankings
   async studentRankings(type: string) {
     const students = await this.prisma.student.findMany({

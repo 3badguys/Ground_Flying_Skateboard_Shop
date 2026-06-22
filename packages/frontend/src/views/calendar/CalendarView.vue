@@ -192,6 +192,10 @@ const studentGroups = computed(() => {
     if (!map[name]) map[name] = []
     map[name].push(r)
   }
+  // 按开始时间排序
+  for (const records of Object.values(map)) {
+    records.sort((a, b) => (a.startTime || '').localeCompare(b.startTime || ''))
+  }
   return map
 })
 

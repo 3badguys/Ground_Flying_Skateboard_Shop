@@ -15,3 +15,6 @@ export function getStudentRankings(type?: string) {
 export function getMonthlyEnrollment(year?: number) {
   return request.get('/statistics/monthly-enrollment', { params: { year } })
 }
+export function getAnnualSummary(year?: number) {
+  return request.get('/statistics/annual-summary', { params: { year } })
+}

@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, MaxLength, Matches, IsDateString, IsOptional, IsInt, Min } from 'class-validator';
+import { IsString, IsNotEmpty, MaxLength, Matches, IsDateString, IsOptional, IsInt, Min, ValidateIf } from 'class-validator';
 
 export class CreateStudentDto {
   @IsString()
@@ -6,10 +6,10 @@ export class CreateStudentDto {
   @MaxLength(50)
   name: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   @MaxLength(50)
-  parentName: string;
+  parentName?: string;
 
   @IsString()
   @IsNotEmpty()
@@ -19,9 +19,11 @@ export class CreateStudentDto {
   @IsNotEmpty()
   grade: string;
 
+  @IsOptional()
   @IsString()
+  @ValidateIf((o) => o.phone !== undefined && o.phone !== null && o.phone !== '')
   @Matches(/^1[3-9]\d{9}$/, { message: '手机号格式不正确' })
-  phone: string;
+  phone?: string;
 
   @IsDateString()
   enrollmentDate: string;

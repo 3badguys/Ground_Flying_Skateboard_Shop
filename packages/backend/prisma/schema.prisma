@@ -10,10 +10,10 @@ datasource db {
 model Student {
   id             Int           @id @default(autoincrement())
   name           String
-  parentName     String
+  parentName     String?
   gender         String
   grade          String
-  phone          String
+  phone          String?
   enrollmentDate DateTime      @db.Date
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt

@@ -99,7 +99,7 @@ const initialForm = {
   gender: '',
   grade: '',
   phone: '',
-  enrollmentDate: '',
+  enrollmentDate: new Date().toISOString().slice(0, 10),
   hours: 0,
   tuition: 0,
 }
@@ -113,12 +113,20 @@ const unitPrice = computed(() => {
 
 const rules = computed<FormRules>(() => ({
   name: [{ required: true, message: '请输入学生姓名', trigger: 'blur' }],
-  parentName: [{ required: true, message: '请输入家长姓名', trigger: 'blur' }],
+  parentName: [{ message: '请输入家长姓名', trigger: 'blur' }],
   gender: [{ required: true, message: '请选择性别', trigger: 'change' }],
   grade: [{ required: true, message: '请选择年级', trigger: 'change' }],
   phone: [
-    { required: true, message: '请输入联系方式', trigger: 'blur' },
-    { pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确', trigger: 'blur' },
+    {
+      validator: (_rule: any, value: string, callback: any) => {
+        if (value && !/^1[3-9]\d{9}$/.test(value)) {
+          callback(new Error('手机号格式不正确'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur',
+    },
   ],
   ...(isEdit.value ? {} : { enrollmentDate: [{ required: true, message: '请选择报名日期', trigger: 'change' }] }),
 }))
@@ -155,19 +163,23 @@ async function handleSubmit() {
     loading.value = true
     try {
       if (isEdit.value && props.data) {
-        const { enrollmentDate, hours, tuition, ...updateData } = form
+        const { enrollmentDate, hours, tuition, ...updateData } = form as any
+        // 空字符串改为 undefined，避免后端校验报错
+        if (!updateData.parentName) delete updateData.parentName
+        if (!updateData.phone) delete updateData.phone
         await updateStudent(props.data.id, updateData)
       } else {
-        await createStudent({
+        const payload: any = {
           name: form.name,
-          parentName: form.parentName,
           gender: form.gender,
           grade: form.grade,
-          phone: form.phone,
           enrollmentDate: form.enrollmentDate,
           hours: form.hours,
           tuition: form.tuition,
-        })
+        }
+        if (form.parentName) payload.parentName = form.parentName
+        if (form.phone) payload.phone = form.phone
+        await createStudent(payload)
       }
       emit('success')
       handleClose()

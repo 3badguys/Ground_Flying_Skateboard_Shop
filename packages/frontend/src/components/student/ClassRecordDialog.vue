@@ -18,18 +18,24 @@
         />
       </el-form-item>
       <el-form-item label="开始时间" prop="startTime">
-        <el-time-picker
+        <el-time-select
           v-model="form.startTime"
+          start="00:00"
+          step="00:30"
+          end="23:30"
           format="HH:mm"
           value-format="HH:mm"
           placeholder="请选择开始时间"
           style="width: 100%"
-          @change="onTimeChange"
+          @change="onStartTimeChange"
         />
       </el-form-item>
       <el-form-item label="结束时间" prop="endTime">
-        <el-time-picker
+        <el-time-select
           v-model="form.endTime"
+          start="00:00"
+          step="00:30"
+          end="23:30"
           format="HH:mm"
           value-format="HH:mm"
           placeholder="请选择结束时间"
@@ -70,7 +76,7 @@ const isEdit = ref(false)
 const loading = ref(false)
 const formRef = ref<FormInstance>()
 
-const initialForm = { classDate: '', startTime: '', endTime: '', hours: 1 }
+const initialForm = { classDate: new Date().toISOString().slice(0, 10), startTime: '09:00', endTime: '10:00', hours: 1 }
 
 const form = reactive({ ...initialForm })
 
@@ -91,6 +97,20 @@ const rules: FormRules = {
       trigger: 'change',
     },
   ],
+}
+
+function onStartTimeChange() {
+  if (!form.startTime) {
+    form.endTime = ''
+    form.hours = 1
+    return
+  }
+  const [sh, sm] = form.startTime.split(':').map(Number)
+  let eh = sh + 1
+  const em = sm
+  if (eh >= 24) eh -= 24
+  form.endTime = `${String(eh).padStart(2, '0')}:${String(em).padStart(2, '0')}`
+  onTimeChange()
 }
 
 function onTimeChange() {

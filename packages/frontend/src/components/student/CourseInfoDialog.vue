@@ -59,6 +59,10 @@ const initialForm = { hours: 1, tuition: 0, enrollmentDate: '' }
 
 const form = reactive({ ...initialForm })
 
+function getToday() {
+  return new Date().toISOString().slice(0, 10)
+}
+
 const unitPrice = computed(() => {
   if (!form.hours || form.hours <= 0) return '0.00'
   return (form.tuition / form.hours).toFixed(2)
@@ -82,7 +86,7 @@ watch(
       })
     } else if (val) {
       isEdit.value = false
-      Object.assign(form, initialForm)
+      Object.assign(form, { ...initialForm, enrollmentDate: getToday() })
     }
   },
 )

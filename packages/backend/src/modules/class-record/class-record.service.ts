@@ -52,6 +52,22 @@ export class ClassRecordService {
       throw new BadRequestException(`课时不能超过剩余课时(${remaining})`);
     }
 
+    // 检查同一学员同一天同一时段是否已有记录
+    if (dto.startTime || dto.endTime) {
+      const duplicate = await this.prisma.classRecord.findFirst({
+        where: {
+          studentId,
+          classDate: new Date(dto.classDate),
+          startTime: dto.startTime || null,
+        },
+      });
+      if (duplicate) {
+        throw new BadRequestException(
+          '该学员在当天该时段已有上课记录',
+        );
+      }
+    }
+
     return this.prisma.classRecord.create({
       data: {
         studentId,
@@ -88,6 +104,27 @@ export class ClassRecordService {
       }
     }
 
+    // 检查同一学员同一天同一时段是否已有记录（排除自身）
+    if (dto.startTime !== undefined || dto.classDate !== undefined) {
+      const checkDate = dto.classDate ? new Date(dto.classDate) : existing.classDate;
+      const checkTime = dto.startTime !== undefined ? dto.startTime : existing.startTime;
+      if (checkTime) {
+        const duplicate = await this.prisma.classRecord.findFirst({
+          where: {
+            studentId: existing.studentId,
+            classDate: checkDate,
+            startTime: checkTime,
+            id: { not: id },
+          },
+        });
+        if (duplicate) {
+          throw new BadRequestException(
+            '该学员在当天该时段已有上课记录',
+          );
+        }
+      }
+    }
+
     const data: any = { ...dto };
     if (dto.classDate) {
       data.classDate = new Date(dto.classDate);
@@ -117,7 +154,7 @@ export class ClassRecordService {
       include: {
         student: { select: { name: true } },
       },
-      orderBy: { classDate: 'asc' },
+      orderBy: [{ classDate: 'asc' }, { startTime: 'asc' }],
     });
 
     // Compute fees per student

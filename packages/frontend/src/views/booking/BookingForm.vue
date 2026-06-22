@@ -43,18 +43,24 @@
           />
         </el-form-item>
         <el-form-item label="开始时间" prop="startTime">
-          <el-time-picker
+          <el-time-select
             v-model="form.startTime"
+            start="00:00"
+            step="00:30"
+            end="23:30"
             format="HH:mm"
             value-format="HH:mm"
             placeholder="请选择开始时间"
             style="width: 100%"
-            @change="onTimeChange"
+            @change="onStartTimeChange"
           />
         </el-form-item>
         <el-form-item label="结束时间" prop="endTime">
-          <el-time-picker
+          <el-time-select
             v-model="form.endTime"
+            start="00:00"
+            step="00:30"
+            end="23:30"
             format="HH:mm"
             value-format="HH:mm"
             placeholder="请选择结束时间"
@@ -92,9 +98,9 @@ const eligibleStudents = ref<EligibleStudent[]>([])
 
 const form = ref({
   studentId: null as number | null,
-  classDate: '',
-  startTime: '',
-  endTime: '',
+  classDate: new Date().toISOString().slice(0, 10),
+  startTime: '09:00',
+  endTime: '10:00',
   hours: 1,
 })
 
@@ -138,6 +144,21 @@ const rules: FormRules = {
   ],
 }
 
+function onStartTimeChange() {
+  if (!form.value.startTime) {
+    form.value.endTime = ''
+    form.value.hours = 1
+    return
+  }
+  const [sh, sm] = form.value.startTime.split(':').map(Number)
+  let eh = sh + 1
+  const em = sm
+  if (eh >= 24) eh -= 24
+  const end = `${String(eh).padStart(2, '0')}:${String(em).padStart(2, '0')}`
+  form.value.endTime = end
+  onTimeChange()
+}
+
 function onTimeChange() {
   if (!form.value.startTime || !form.value.endTime) return
   const [sh, sm] = form.value.startTime.split(':').map(Number)
@@ -178,7 +199,7 @@ async function handleSubmit() {
 }
 
 function handleReset() {
-  form.value = { studentId: null, classDate: '', startTime: '', endTime: '', hours: 1 }
+  form.value = { studentId: null, classDate: new Date().toISOString().slice(0, 10), startTime: '09:00', endTime: '10:00', hours: 1 }
   formRef.value?.resetFields()
 }
 

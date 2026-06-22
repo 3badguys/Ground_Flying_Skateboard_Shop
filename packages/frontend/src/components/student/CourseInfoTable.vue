@@ -3,7 +3,7 @@
     <div v-if="!readonly" class="toolbar">
       <el-button type="primary" size="small" @click="openAdd">添加课程</el-button>
     </div>
-    <el-table :data="list" border stripe size="small">
+    <el-table :data="list" border stripe size="small" :row-class-name="rowClassName">
       <el-table-column label="报名日期">
         <template #default="{ row }">{{ formatDate(row.enrollmentDate) }}</template>
       </el-table-column>
@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { getCourseInfos, deleteCourseInfo } from '../../api/course-info'
 import type { CourseInfo } from '../../types/student'
@@ -45,6 +45,16 @@ const emit = defineEmits<{ refresh: [] }>()
 const list = ref<CourseInfo[]>([])
 const dialogVisible = ref(false)
 const currentData = ref<CourseInfo | null>(null)
+
+// 当有2条及以上报课记录时，保留最近一条正常显示，更早的字体变红
+const hasMultiple = computed(() => list.value.length >= 2)
+function rowClassName({ rowIndex }: { row: CourseInfo; rowIndex: number }) {
+  // 数据按 enrollmentDate desc 排序，rowIndex=0 是最新记录
+  if (hasMultiple.value && rowIndex > 0) {
+    return 'old-course-row'
+  }
+  return ''
+}
 
 async function fetchList() {
   list.value = (await getCourseInfos(props.studentId)) as unknown as CourseInfo[]
@@ -81,5 +91,13 @@ onMounted(fetchList)
 <style scoped lang="scss">
 .toolbar {
   margin-bottom: 10px;
+}
+
+:deep(.old-course-row) {
+  color: #f56c6c;
+  --el-table-tr-text-color: #f56c6c;
+  .el-table__cell {
+    color: #f56c6c;
+  }
 }
 </style>

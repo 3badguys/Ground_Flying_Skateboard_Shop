@@ -29,4 +29,9 @@ export class StatisticsController {
   monthlyEnrollment(@Query('year') year?: number) {
     return this.statisticsService.monthlyEnrollment(year || new Date().getFullYear());
   }
+
+  @Get('annual-summary')
+  annualSummary(@Query('year') year?: number) {
+    return this.statisticsService.annualSummary(year || new Date().getFullYear());
+  }
 }

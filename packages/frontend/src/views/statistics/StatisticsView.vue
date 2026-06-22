@@ -29,6 +29,21 @@
         <template #header>月度报课学生数</template>
         <v-chart :option="enrollOption" autoresize style="height: 320px" />
       </el-card>
+      <el-card class="chart-card">
+        <template #header>年度汇总</template>
+        <el-table :data="[summary]" border stripe size="small" style="width: 100%">
+          <el-table-column prop="enrollmentIncome" label="年度报课收入">
+            <template #default="{ row }">¥{{ row.enrollmentIncome }}</template>
+          </el-table-column>
+          <el-table-column prop="completedIncome" label="年度完课收入">
+            <template #default="{ row }">¥{{ row.completedIncome }}</template>
+          </el-table-column>
+          <el-table-column prop="enrollmentHours" label="年度报课课时" />
+          <el-table-column prop="completedHours" label="年度完课课时" />
+          <el-table-column prop="newStudents" label="新注册学生（人）" />
+          <el-table-column prop="continuingStudents" label="续课学生（人次）" />
+        </el-table>
+      </el-card>
     </div>
   </div>
 </template>
@@ -40,7 +55,7 @@ import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { BarChart, LineChart } from 'echarts/charts'
 import { TitleComponent, TooltipComponent, LegendComponent, GridComponent } from 'echarts/components'
-import { getMonthlyIncome, getMonthlyHours, getMonthlyEnrollment } from '../../api/statistics'
+import { getMonthlyIncome, getMonthlyHours, getMonthlyEnrollment, getAnnualSummary } from '../../api/statistics'
 
 use([CanvasRenderer, BarChart, LineChart, TitleComponent, TooltipComponent, LegendComponent, GridComponent])
 
@@ -48,6 +63,14 @@ const year = ref(new Date().getFullYear().toString())
 const incomeOption = ref({})
 const hoursOption = ref({})
 const enrollOption = ref({})
+const summary = ref({
+  enrollmentIncome: 0,
+  completedIncome: 0,
+  enrollmentHours: 0,
+  completedHours: 0,
+  newStudents: 0,
+  continuingStudents: 0,
+})
 
 async function fetchIncome() {
   const data = (await getMonthlyIncome(parseInt(year.value))) as unknown as any[]
@@ -91,16 +114,22 @@ async function fetchEnrollment() {
   }
 }
 
+async function fetchSummary() {
+  summary.value = (await getAnnualSummary(parseInt(year.value))) as unknown as any
+}
+
 function onYearChange() {
   fetchIncome()
   fetchHours()
   fetchEnrollment()
+  fetchSummary()
 }
 
 onMounted(() => {
   fetchIncome()
   fetchHours()
   fetchEnrollment()
+  fetchSummary()
 })
 </script>
 
