@@ -1,7 +1,9 @@
 FROM node:22-alpine AS base
+ARG NPM_REGISTRY
 WORKDIR /app
 COPY package.json ./
-RUN npm install
+RUN if [ -n "$NPM_REGISTRY" ]; then npm config set registry "$NPM_REGISTRY"; fi \
+    && npm install
 COPY . .
 
 # ---- Dev Stage ----

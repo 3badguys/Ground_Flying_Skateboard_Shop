@@ -18,6 +18,8 @@ services:
     build:
       context: ./packages/backend
       target: production
+      args:
+        NPM_REGISTRY: ${NPM_REGISTRY:-}
     container_name: skateboard-backend
     restart: unless-stopped
     expose:
@@ -36,6 +38,8 @@ services:
     build:
       context: ./packages/frontend
       target: production
+      args:
+        NPM_REGISTRY: ${NPM_REGISTRY:-}
     container_name: skateboard-frontend
     restart: unless-stopped
     environment:

@@ -1,8 +1,10 @@
 FROM node:22-alpine AS base
+ARG NPM_REGISTRY
 WORKDIR /app
 COPY package.json ./
 COPY prisma ./prisma
-RUN npm install && npx prisma generate
+RUN if [ -n "$NPM_REGISTRY" ]; then npm config set registry "$NPM_REGISTRY"; fi \
+    && npm install && npx prisma generate
 COPY . .
 
 # ---- Development (hot reload) ----
@@ -12,7 +14,10 @@ CMD ["npx", "nest", "start", "--watch"]
 
 # ---- Builder (compile + prune) ----
 FROM base AS builder
-RUN npx nest build && npm prune --production && find /app/dist -name '*.d.ts' -o -name '*.js.map' | xargs rm -f
+RUN npm run build \
+    && ls /app/dist/main.js \
+    && npm prune --production \
+    && find /app/dist \( -name '*.d.ts' -o -name '*.js.map' \) -delete
 
 # ---- Production (minimal runtime) ----
 FROM node:22-alpine AS production
