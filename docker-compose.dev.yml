@@ -8,8 +8,8 @@ services:
     command: >
       sh -c "npx prisma migrate deploy && npx nest start --watch"
     volumes:
-      - ./packages/backend/src:/app/src
-      - ./packages/backend/prisma:/app/prisma
+      - ./packages/backend/src:/app/packages/backend/src
+      - ./packages/backend/prisma:/app/packages/backend/prisma
 
   skateboard-frontend:
     build:
@@ -20,8 +20,8 @@ services:
       VITE_API_TARGET: "http://skateboard-backend:3000"
     command: npx vite --host 0.0.0.0
     volumes:
-      - ./packages/frontend/src:/app/src
-      - ./packages/frontend/index.html:/app/index.html
-      - ./packages/frontend/vite.config.ts:/app/vite.config.ts
-      - ./packages/frontend/.env:/app/.env:ro
-      - ./packages/frontend/public:/app/public
+      - ./packages/frontend/src:/app/packages/frontend/src
+      - ./packages/frontend/index.html:/app/packages/frontend/index.html
+      - ./packages/frontend/vite.config.ts:/app/packages/frontend/vite.config.ts
+      - ./packages/frontend/.env:/app/packages/frontend/.env:ro
+      - ./packages/frontend/public:/app/packages/frontend/public

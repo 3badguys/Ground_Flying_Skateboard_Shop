@@ -94,12 +94,35 @@ cp .env.example .env
 核心配置：
 
 ```
-APP_BASE_URL=https://your-domain.com    # 服务器地址
-VITE_BASE=/gfs/                         # 前端路径前缀
-CAPACITOR_REMOTE=false                  # App 远程模式开关
+APP_BASE_URL=https://your-domain.com          # 服务器地址
+VITE_BASE=/gfs/                               # 前端路径前缀
+CAPACITOR_REMOTE=false                        # App 远程模式开关
+NPM_REGISTRY=https://registry.npmmirror.com/  # npm 镜像源（加速国内下载）
 ```
 
-改完运行 `npm run sync:config` 同步到各子配置。
+> 改完运行 `npm run sync:config` 同步到各子配置。
+
+#### npm 镜像源
+
+`NPM_REGISTRY` 用于加速 Docker 构建时的 `npm install`，可设为国内镜像（阿里云 `npmmirror.com`、腾讯云 `mirrors.cloud.tencent.com/npm/` 等）。
+
+推荐用 **nrm**（Node Registry Manager）快速选择最快的镜像源：
+
+```bash
+# 全局安装 nrm
+npm install -g nrm
+
+# 查看所有可用镜像源
+nrm ls
+
+# 测试各镜像源的延迟，选最快的
+nrm test
+
+# 切换到指定源
+nrm use taobao
+```
+
+选好最快的源后，把对应地址填入 `.env` 的 `NPM_REGISTRY` 即可。留空则使用 npm 官方源 `https://registry.npmjs.org`。
 
 ### 2. 启动服务
 

@@ -16,7 +16,8 @@ services:
 
   skateboard-backend:
     build:
-      context: ./packages/backend
+      context: .
+      dockerfile: packages/backend/Dockerfile
       target: production
       args:
         NPM_REGISTRY: ${NPM_REGISTRY:-}
@@ -36,7 +37,8 @@ services:
 
   skateboard-frontend:
     build:
-      context: ./packages/frontend
+      context: .
+      dockerfile: packages/frontend/Dockerfile
       target: production
       args:
         NPM_REGISTRY: ${NPM_REGISTRY:-}
