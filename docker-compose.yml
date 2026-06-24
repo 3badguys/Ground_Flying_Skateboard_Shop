@@ -29,6 +29,15 @@ services:
       TZ: ${TIMEZONE:-Asia/Shanghai}
       DATABASE_URL: "postgresql://postgres:admin123@skateboard-postgres:5432/skateboard_shop"
       PORT: 3000
+      # JWT
+      ACCESS_SECRET: ${ACCESS_SECRET}
+      REFRESH_SECRET: ${REFRESH_SECRET}
+      ACCESS_EXPIRES: ${ACCESS_EXPIRES:-15m}
+      REFRESH_EXPIRES: ${REFRESH_EXPIRES:-7d}
+      # SUPER_ADMIN seed
+      SUPER_ADMIN_USERNAME: ${SUPER_ADMIN_USERNAME:-admin}
+      SUPER_ADMIN_PASSWORD: ${SUPER_ADMIN_PASSWORD:-Admin@123}
+      SUPER_ADMIN_FORCE_RESET: ${SUPER_ADMIN_FORCE_RESET:-false}
     depends_on:
       skateboard-postgres:
         condition: service_started

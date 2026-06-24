@@ -220,8 +220,9 @@ PostgreSQL，通过 Prisma ORM 管理，模型定义在 `packages/backend/prisma
 
 ```
 # JWT 认证
-ACCESS_SECRET=<随机字符串，至少 32 位>
-REFRESH_SECRET=<另一个随机字符串，至少 32 位>
+# openssl rand -base64 32
+ACCESS_SECRET=change-me-to-a-random-string-at-least-32-chars
+REFRESH_SECRET=change-me-to-another-random-string-at-least-32-chars
 ACCESS_EXPIRES=15m
 REFRESH_EXPIRES=7d
 
