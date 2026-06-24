@@ -2,16 +2,26 @@ import {
   Injectable,
   BadRequestException,
   NotFoundException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { BookingDto } from './dto/booking.dto';
+import { Role } from '../auth/roles';
 
 @Injectable()
 export class BookingService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getEligibleStudents() {
+  async getEligibleStudents(user: { id: number; role: Role; phone: string | null }) {
+    const where: Record<string, unknown> = {};
+
+    // USER role only sees students matching their phone
+    if (user.role === Role.USER && user.phone) {
+      where.phone = user.phone;
+    }
+
     const students = await this.prisma.student.findMany({
+      where,
       include: {
         courseInfos: true,
         classRecords: true,
@@ -42,12 +52,17 @@ export class BookingService {
     return eligible;
   }
 
-  async book(dto: BookingDto) {
+  async book(dto: BookingDto, user?: { id: number; role: Role; phone: string | null }) {
     return this.prisma.$transaction(async (tx) => {
       const student = await tx.student.findUnique({
         where: { id: dto.studentId },
       });
       if (!student) throw new NotFoundException('学生不存在');
+
+      // USER can only book for students matching their phone
+      if (user?.role === Role.USER && user.phone && student.phone !== user.phone) {
+        throw new ForbiddenException('只能为自己的学生预约');
+      }
 
       const [courseAgg, recordAgg] = await Promise.all([
         tx.courseInfo.aggregate({

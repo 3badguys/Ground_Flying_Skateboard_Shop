@@ -60,3 +60,40 @@ model ClassRecord {
   @@index([studentId])
   @@map("class_records")
 }
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  USER
+}
+
+model User {
+  id                Int            @id @default(autoincrement())
+  username          String?        @unique
+  phone             String?        @unique
+  password          String
+  role              Role           @default(USER)
+  mustResetPassword Boolean        @default(true)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  refreshTokens     RefreshToken[]
+
+  @@index([phone])
+  @@index([role])
+  @@map("users")
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+  @@map("refresh_tokens")
+}

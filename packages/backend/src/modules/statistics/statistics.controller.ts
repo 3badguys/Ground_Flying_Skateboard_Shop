@@ -1,6 +1,9 @@
 import { Controller, Get, Query } from '@nestjs/common';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../auth/roles';
 import { StatisticsService } from './statistics.service';
 
+@Roles(Role.SUPER_ADMIN, Role.ADMIN)
 @Controller('statistics')
 export class StatisticsController {
   constructor(private readonly statisticsService: StatisticsService) {}

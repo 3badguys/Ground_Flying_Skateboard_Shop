@@ -101,6 +101,38 @@ function randomTuition(hours: number): number {
   return Math.round(hours * unitPrice * 100) / 100;
 }
 
+// ── 超级管理员种子 ──────────────────────────────────────────
+
+async function seedSuperAdmin() {
+  // Check .env or use defaults
+  const username = process.env.SUPER_ADMIN_USERNAME || 'admin';
+  const password = process.env.SUPER_ADMIN_PASSWORD || 'Admin@123';
+  const forceReset = process.env.SUPER_ADMIN_FORCE_RESET !== 'false';
+
+  const existing = await prisma.user.findFirst({
+    where: { role: 'SUPER_ADMIN', username },
+  });
+
+  if (existing) {
+    console.log('  👑 SUPER_ADMIN already exists, skipping.');
+    return;
+  }
+
+  const bcrypt = require('bcrypt');
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  await prisma.user.create({
+    data: {
+      username,
+      password: hashedPassword,
+      role: 'SUPER_ADMIN',
+      mustResetPassword: forceReset,
+    },
+  });
+
+  console.log(`  👑 SUPER_ADMIN created: username="${username}", forceReset=${forceReset}`);
+}
+
 // ── 主流程 ──────────────────────────────────────────────────
 
 async function main() {
@@ -222,6 +254,9 @@ async function main() {
     }
   }
   console.log(`  ✅ 为 ${studentsWithRecords.length} 名学生创建了上课记录`);
+
+  // ── 创建超级管理员 ──────────────────────────────────────
+  await seedSuperAdmin();
 
   // ── 汇总 ──────────────────────────────────────────────────
   const totalStudents = await prisma.student.count();

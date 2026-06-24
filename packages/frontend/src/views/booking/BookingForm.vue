@@ -174,6 +174,10 @@ function onStudentChange() {
 
 async function fetchEligibleStudents() {
   eligibleStudents.value = (await getEligibleStudents()) as unknown as EligibleStudent[]
+  // Auto-select if only one student
+  if (eligibleStudents.value.length === 1) {
+    form.value.studentId = eligibleStudents.value[0].id
+  }
 }
 
 async function handleSubmit() {

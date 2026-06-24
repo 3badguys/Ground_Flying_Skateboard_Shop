@@ -11,8 +11,10 @@ COPY packages/backend/prisma packages/backend/prisma
 COPY packages/frontend/package.json packages/frontend/
 
 # Install ONLY the backend workspace, --ignore-scripts for speed & security
+# Rebuild bcrypt after install (native binding required)
 RUN if [ -n "$NPM_REGISTRY" ]; then npm config set registry "$NPM_REGISTRY"; fi \
     && npm ci --workspace=packages/backend --ignore-scripts \
+    && npm rebuild bcrypt \
     && cd packages/backend && npx prisma generate
 
 # Copy backend source code

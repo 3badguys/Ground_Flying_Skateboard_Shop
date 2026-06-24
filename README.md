@@ -35,6 +35,7 @@ Ground_Flying_Skateboard_Shop/
 │   │       │   ├── class-record/   # 上课记录
 │   │       │   ├── booking/        # 预约上课
 │   │       │   ├── statistics/     # 数据统计
+│   │       │   ├── auth/            # 认证与用户管理
 │   │       │   └── settings/       # 系统设置
 │   │       └── common/             # 公共模块
 │   └── frontend/               # Vue 3 前端
@@ -47,7 +48,8 @@ Ground_Flying_Skateboard_Shop/
 │           │   ├── booking/     # 预约上课页
 │           │   ├── calendar/    # 课程表（日历视图）
 │           │   ├── statistics/  # 数据统计图表
-│           │   └── settings/    # 系统设置页
+│           │   ├── settings/    # 系统设置页
+│           │   └── auth/        # 登录、账号信息、用户管理
 │           ├── components/      # 公共组件
 │           ├── api/             # API 请求封装
 │           └── router/          # 路由配置
@@ -197,6 +199,50 @@ PostgreSQL，通过 Prisma ORM 管理，模型定义在 `packages/backend/prisma
 - **course_infos** — 课程报名记录
 - **class_records** — 上课记录
 - **settings** — 系统配置（键值对）
+- **users** — 用户认证（SUPER_ADMIN / ADMIN / USER）
+- **refresh_tokens** — JWT 刷新令牌
+
+## 认证系统
+
+采用 JWT 双令牌认证 + 角色权限控制。
+
+### 角色
+
+| 角色 | 登录方式 | 创建者 | 权限 |
+|------|---------|--------|------|
+| 超级管理员 (SUPER_ADMIN) | 用户名 | 初始化脚本 | 全部权限，可创建管理员 |
+| 管理员 (ADMIN) | 用户名 | 超级管理员 | 管理学生数据，可创建普通用户 |
+| 普通用户 (USER) | 手机号 | 超级管理员 / 管理员 | 查看关联学生信息 |
+
+### 环境变量
+
+在 `.env` 中添加：
+
+```
+# JWT 认证
+ACCESS_SECRET=<随机字符串，至少 32 位>
+REFRESH_SECRET=<另一个随机字符串，至少 32 位>
+ACCESS_EXPIRES=15m
+REFRESH_EXPIRES=7d
+
+# 超级管理员初始账号
+SUPER_ADMIN_USERNAME=admin
+SUPER_ADMIN_PASSWORD=Admin@123
+SUPER_ADMIN_FORCE_RESET=false
+```
+
+### 初始化
+
+1. 运行 `npm run db:seed` 创建初始超级管理员。
+2. 打开 `/login`，用配置的超级管理员账号登录。
+3. 在 **用户管理** 页面创建管理员和普通用户。
+
+### 令牌流程
+
+- 访问令牌（默认 15 分钟）通过 `Authorization: Bearer <token>` 请求头传递
+- 刷新令牌（默认 7 天）存储在 localStorage，用于获取新的访问令牌
+- 登出和修改密码时令牌自动失效
+- 前端 401 响应自动触发令牌刷新
 
 ## Nginx 网关代理（Dev vs Prod）
 

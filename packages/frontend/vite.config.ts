@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => {
       port: 5173,
       allowedHosts: (env.ALLOWED_HOSTS || '.ngrok-free.dev,.ngrok-free.app').split(','),
       hmr: false,
+      watch: { usePolling: true },
       proxy: base !== '/'
         ? {
             [`${base}api/`]: {

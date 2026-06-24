@@ -27,7 +27,7 @@
             <div v-if="getDayTotal(data.day) > 0" class="day-info">
               <span>{{ getDayTotal(data.day) }}课时</span>
               <span>{{ getDayStudents(data.day) }}人</span>
-              <span>¥{{ getDayFee(data.day) }}</span>
+              <span v-if="isAdmin">¥{{ getDayFee(data.day) }}</span>
             </div>
           </div>
         </template>
@@ -38,7 +38,7 @@
       <span>本月共 <b>{{ monthTotal }}课时</b></span>
       <span>上课 <b>{{ monthDays }}</b> 天</span>
       <span>涉及 <b>{{ monthStudents }}</b> 名学生</span>
-      <span>学费 <b>¥{{ monthTotalFee }}</b></span>
+      <span v-if="isAdmin">学费 <b>¥{{ monthTotalFee }}</b></span>
     </div>
 
     <el-drawer
@@ -48,7 +48,7 @@
       @close="selectedDate = ''"
     >
       <div v-for="(group, name) in studentGroups" :key="name" class="student-group">
-        <div class="student-name" @click="onStudentClick(group[0])">{{ name }}</div>
+        <div class="student-name" :class="{ clickable: isAdmin }" @click="isAdmin && onStudentClick(group[0])">{{ name }}</div>
         <el-table :data="group" border stripe size="small">
           <el-table-column label="起止时间" width="130">
             <template #default="{ row }">
@@ -57,10 +57,10 @@
             </template>
           </el-table-column>
           <el-table-column prop="hours" label="课时" width="60" align="center" />
-          <el-table-column label="费用" width="80">
+          <el-table-column v-if="isAdmin" label="费用" width="80">
             <template #default="{ row }">¥{{ row.classFee }}</template>
           </el-table-column>
-          <el-table-column label="操作" width="160">
+          <el-table-column v-if="isAdmin" label="操作" width="160">
             <template #default="{ row }">
               <el-button size="small" type="primary" @click="openEdit(row)">修改</el-button>
               <el-button size="small" type="danger" @click="handleDelete(row)">删除</el-button>
@@ -95,7 +95,7 @@
           <span class="info-label">已用课时</span><b>{{ studentDetail.usedHours }}</b>
           <span class="info-label">剩余课时</span><b>{{ studentDetail.remainingHours }}</b>
         </div>
-        <div class="info-line hours-line">
+        <div v-if="isAdmin" class="info-line hours-line">
           <span class="info-label">报课费用</span><b>¥{{ studentDetail.totalTuition }}</b>
           <span class="info-label">完成费用</span><b>¥{{ studentDetail.completedTuition }}</b>
         </div>
@@ -118,9 +118,15 @@ import { ElMessageBox } from 'element-plus'
 import { getCalendar, deleteClassRecord } from '../../api/class-record'
 import { getStudent } from '../../api/student'
 import { formatDate } from '../../utils/format'
+import { currentUser } from '../../utils/auth'
 import ClassRecordDialog from '../../components/student/ClassRecordDialog.vue'
 import CourseInfoTable from '../../components/student/CourseInfoTable.vue'
 import ClassRecordTable from '../../components/student/ClassRecordTable.vue'
+
+const isAdmin = computed(() => {
+  const role = currentUser.value?.role
+  return role === 'SUPER_ADMIN' || role === 'ADMIN'
+})
 
 const now = new Date()
 const currentDate = ref(new Date())
@@ -386,8 +392,10 @@ onMounted(() => {
     font-size: 14px;
     margin-bottom: 6px;
     color: #409eff;
-    cursor: pointer;
-    &:hover { text-decoration: underline; }
+    &.clickable {
+      cursor: pointer;
+      &:hover { text-decoration: underline; }
+    }
   }
 }
 

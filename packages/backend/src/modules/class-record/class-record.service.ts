@@ -1,14 +1,25 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateClassRecordDto } from './dto/create-class-record.dto';
 import { UpdateClassRecordDto } from './dto/update-class-record.dto';
 import { computeClassFees } from '../../common/fee-calculator';
+import { Role } from '../auth/roles';
 
 @Injectable()
 export class ClassRecordService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findByStudentId(studentId: number) {
+  async findByStudentId(
+    studentId: number,
+    user?: { id: number; role: Role; phone: string | null },
+  ) {
+    // USER can only see records for students matching their phone
+    if (user?.role === Role.USER && user.phone) {
+      const student = await this.prisma.student.findUnique({ where: { id: studentId } });
+      if (!student || student.phone !== user.phone) {
+        throw new ForbiddenException('Not allowed');
+      }
+    }
     const [records, courses] = await Promise.all([
       this.prisma.classRecord.findMany({
         where: { studentId },
@@ -142,15 +153,20 @@ export class ClassRecordService {
     return this.prisma.classRecord.delete({ where: { id } });
   }
 
-  async calendar(month: string) {
+  async calendar(month: string, user?: { id: number; role: Role; phone: string | null }) {
     const [y, m] = month.split('-').map(Number);
     const start = new Date(y, m - 1, 1);
     const end = new Date(y, m, 1);
 
+    const where: any = { classDate: { gte: start, lt: end } };
+
+    // USER only sees records for students matching their phone
+    if (user?.role === Role.USER && user.phone) {
+      where.student = { phone: user.phone };
+    }
+
     const records = await this.prisma.classRecord.findMany({
-      where: {
-        classDate: { gte: start, lt: end },
-      },
+      where,
       include: {
         student: { select: { name: true } },
       },

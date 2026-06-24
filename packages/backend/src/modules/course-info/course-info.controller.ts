@@ -1,3 +1,5 @@
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../auth/roles';
 import {
   Controller,
   Get,
@@ -12,6 +14,7 @@ import { CourseInfoService } from './course-info.service';
 import { CreateCourseInfoDto } from './dto/create-course-info.dto';
 import { UpdateCourseInfoDto } from './dto/update-course-info.dto';
 
+@Roles(Role.SUPER_ADMIN, Role.ADMIN)
 @Controller()
 export class CourseInfoController {
   constructor(private readonly courseInfoService: CourseInfoService) {}
