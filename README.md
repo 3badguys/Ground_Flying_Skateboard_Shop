@@ -96,10 +96,18 @@ cp .env.example .env
 核心配置：
 
 ```
-APP_BASE_URL=https://your-domain.com          # 服务器地址
-VITE_BASE=/gfs/                               # 前端路径前缀
-CAPACITOR_REMOTE=false                        # App 远程模式开关
-NPM_REGISTRY=https://registry.npmmirror.com/  # npm 镜像源（加速国内下载）
+# 数据库（唯一数据源，docker-compose 从这里取值）
+DB_USER=postgres
+DB_PASSWORD=<your-password>
+DB_NAME=skateboard_shop
+
+# 前端
+VITE_BASE=/gfs/
+APP_BASE_URL=https://your-domain.com
+CAPACITOR_REMOTE=false
+
+# npm 镜像（加速国内 Docker 构建）
+NPM_REGISTRY=https://registry.npmmirror.com/
 ```
 
 > 改完运行 `npm run sync:config` 同步到各子配置。
@@ -220,7 +228,7 @@ PostgreSQL，通过 Prisma ORM 管理，模型定义在 `packages/backend/prisma
 
 ```
 # JWT 认证
-# openssl rand -base64 32
+# Generate with: openssl rand -base64 32
 ACCESS_SECRET=change-me-to-a-random-string-at-least-32-chars
 REFRESH_SECRET=change-me-to-another-random-string-at-least-32-chars
 ACCESS_EXPIRES=15m
