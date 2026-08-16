@@ -39,6 +39,10 @@ services:
       SUPER_ADMIN_USERNAME: ${SUPER_ADMIN_USERNAME:-admin}
       SUPER_ADMIN_PASSWORD: ${SUPER_ADMIN_PASSWORD:-Admin@123}
       SUPER_ADMIN_FORCE_RESET: ${SUPER_ADMIN_FORCE_RESET:-false}
+      # Backup files live on a named volume so they survive container rebuilds
+      BACKUP_DIR: /app/backups
+    volumes:
+      - backups_data:/app/backups
     depends_on:
       skateboard-postgres:
         condition: service_started
@@ -79,6 +83,7 @@ services:
 
 volumes:
   pg_data:
+  backups_data:
 
 networks:
   shared_gateway_net:

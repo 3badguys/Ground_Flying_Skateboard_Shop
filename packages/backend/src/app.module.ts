@@ -11,6 +11,7 @@ import { ClassRecordModule } from './modules/class-record/class-record.module';
 import { BookingModule } from './modules/booking/booking.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
+import { BackupModule } from './modules/backup/backup.module';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from './modules/auth/guards/roles.guard';
 
@@ -25,6 +26,7 @@ import { RolesGuard } from './modules/auth/guards/roles.guard';
     BookingModule,
     SettingsModule,
     StatisticsModule,
+    BackupModule,
   ],
   controllers: [AppController],
   providers: [

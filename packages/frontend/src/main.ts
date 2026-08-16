@@ -15,6 +15,7 @@ import {
   UserFilled,
   Avatar,
   SwitchButton,
+  Box,
 } from '@element-plus/icons-vue'
 import App from './App.vue'
 import router from './router'
@@ -34,6 +35,7 @@ app.component('Menu', Menu)
 app.component('UserFilled', UserFilled)
 app.component('Avatar', Avatar)
 app.component('SwitchButton', SwitchButton)
+app.component('Box', Box)
 
 app.use(ElementPlus, { locale: zhCn })
 app.use(router)

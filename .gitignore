@@ -7,6 +7,8 @@ dist/
 .DS_Store
 Thumbs.db
 .claude/
+.codebase-index/
+.pi/
 
 # Capacitor auto-generated config
 packages/frontend/capacitor.config.json

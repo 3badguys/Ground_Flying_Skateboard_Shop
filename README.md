@@ -36,7 +36,8 @@ Ground_Flying_Skateboard_Shop/
 │   │       │   ├── booking/        # 预约上课
 │   │       │   ├── statistics/     # 数据统计
 │   │       │   ├── auth/            # 认证与用户管理
-│   │       │   └── settings/       # 系统设置
+│   │       │   ├── settings/       # 系统设置
+│   │       │   └── backup/         # 系统备份与恢复
 │   │       └── common/             # 公共模块
 │   └── frontend/               # Vue 3 前端
 │       ├── Dockerfile
@@ -48,7 +49,7 @@ Ground_Flying_Skateboard_Shop/
 │           │   ├── booking/     # 预约上课页
 │           │   ├── calendar/    # 课程表（日历视图）
 │           │   ├── statistics/  # 数据统计图表
-│           │   ├── settings/    # 系统设置页
+│           │   ├── settings/    # 系统设置页 / 系统备份页
 │           │   └── auth/        # 登录、账号信息、用户管理
 │           ├── components/      # 公共组件
 │           ├── api/             # API 请求封装
@@ -62,6 +63,7 @@ Ground_Flying_Skateboard_Shop/
 - **课程表** — 日历热度图展示每日上课情况，点击查看详情
 - **数据统计** — 月度收入、课时消耗、学生报课柱状/折线图
 - **系统设置** — 课时预警数配置，剩余课时低于阈值标红
+- **系统备份** — 一键备份数据库并下载 .sql 文件，支持上传恢复、30 天自动清理
 - **PWA** — 手机浏览器添加到桌面，独立窗口运行
 - **Android & IOS App** — Capacitor 打包 APP，原生安装
 
@@ -209,6 +211,33 @@ PostgreSQL，通过 Prisma ORM 管理，模型定义在 `packages/backend/prisma
 - **settings** — 系统配置（键值对）
 - **users** — 用户认证（SUPER_ADMIN / ADMIN / USER）
 - **refresh_tokens** — JWT 刷新令牌
+
+## 系统备份与恢复
+
+后台 **系统备份** 页签（SUPER_ADMIN / ADMIN）提供数据库备份与恢复：
+
+| 功能 | 说明 |
+|------|------|
+| **备份数据库** | 后端调用 `pg_dump` 生成 `gfs_database_YYYYMMDD_HHMMSS.sql`，浏览器自动下载，Toast 提示成功 |
+| **备份记录** | 列出服务器上的备份文件（名称 / 大小 / 时间），支持再次下载与删除 |
+| **恢复数据库** | 上传 .sql 文件，二次确认后执行恢复；`psql` 以 `--single-transaction` 运行，失败自动回滚 |
+
+实现要点：
+
+- 备份文件存储在服务器本地（`BACKUP_DIR`，默认 `工作目录/backups`，Docker 中为 `/app/backups` 命名卷 `backups_data`），自动清理 **30 天前** 的旧文件。
+- 后端镜像需安装 PostgreSQL 客户端（`Dockerfile` 已添加 `postgresql16-client`，提供 `pg_dump` / `psql`）。
+- 下载接口直接流式返回文件，绕过全局 JSON 响应拦截器；前端用 Blob + 鉴权头触发浏览器下载。
+- 备份 / 恢复仅对 `SUPER_ADMIN`、`ADMIN` 开放。
+
+API 一览：
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | `/api/backup` | 创建备份 |
+| GET | `/api/backup/list` | 备份列表 |
+| GET | `/api/backup/download/:name` | 下载备份文件 |
+| DELETE | `/api/backup/:name` | 删除备份 |
+| POST | `/api/backup/restore` | 上传 .sql 并恢复（multipart `file` 字段） |
 
 ## 认证系统
 

@@ -9,7 +9,7 @@ import {
 
 // Capacitor: use __API_BASE__ (full URL for remote API)
 // Browser:   use VITE_BASE + api (relative, matches nginx location)
-const apiBase = (window as any).Capacitor
+export const apiBase = (window as any).Capacitor
   ? ((window as any).__API_BASE__ || '/api')
   : `${import.meta.env.BASE_URL}api`
 

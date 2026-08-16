@@ -44,6 +44,12 @@ const router = createRouter({
       component: () => import('../views/settings/SystemSettings.vue'),
     },
     {
+      path: '/backup',
+      name: 'Backup',
+      component: () => import('../views/settings/SystemBackup.vue'),
+      meta: { roles: ['SUPER_ADMIN', 'ADMIN'] },
+    },
+    {
       path: '/account',
       name: 'Account',
       component: () => import('../views/auth/AccountView.vue'),

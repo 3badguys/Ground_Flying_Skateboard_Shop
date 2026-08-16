@@ -16,14 +16,6 @@
             <el-icon><TrendCharts /></el-icon>
             <span v-if="!isCollapse" class="menu-title">数据统计</span>
           </router-link>
-          <router-link to="/settings" class="menu-item" :class="{ active: $route.path === '/settings' }" @click="onClick">
-            <el-icon><Setting /></el-icon>
-            <span v-if="!isCollapse" class="menu-title">系统设置</span>
-          </router-link>
-          <router-link to="/users" class="menu-item" :class="{ active: $route.path === '/users' }" @click="onClick">
-            <el-icon><UserFilled /></el-icon>
-            <span v-if="!isCollapse" class="menu-title">用户管理</span>
-          </router-link>
         </template>
 
         <!-- 所有用户可见 -->
@@ -38,6 +30,21 @@
       </div>
 
       <div class="menu-bottom">
+        <!-- 管理员/超级管理员可见 -->
+        <template v-if="isAdmin">
+          <router-link to="/settings" class="menu-item" :class="{ active: $route.path === '/settings' }" @click="onClick">
+            <el-icon><Setting /></el-icon>
+            <span v-if="!isCollapse" class="menu-title">系统设置</span>
+          </router-link>
+          <router-link to="/backup" class="menu-item" :class="{ active: $route.path === '/backup' }" @click="onClick">
+            <el-icon><Box /></el-icon>
+            <span v-if="!isCollapse" class="menu-title">系统备份</span>
+          </router-link>
+          <router-link to="/users" class="menu-item" :class="{ active: $route.path === '/users' }" @click="onClick">
+            <el-icon><UserFilled /></el-icon>
+            <span v-if="!isCollapse" class="menu-title">用户管理</span>
+          </router-link>
+        </template>
         <router-link to="/account" class="menu-item" :class="{ active: $route.path === '/account' }" @click="onClick">
           <el-icon><Avatar /></el-icon>
           <span v-if="!isCollapse" class="menu-title">账号信息</span>
