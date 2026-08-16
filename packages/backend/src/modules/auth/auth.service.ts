@@ -349,33 +349,6 @@ export class AuthService {
     await this.prisma.user.delete({ where: { id: targetId } });
   }
 
-  async getUserPassword(
-    requesterId: number,
-    targetId: number,
-  ): Promise<{ password: string }> {
-    const requester = await this.prisma.user.findUniqueOrThrow({
-      where: { id: requesterId },
-    });
-    const target = await this.prisma.user.findUniqueOrThrow({
-      where: { id: targetId },
-    });
-
-    // SUPER_ADMIN can see anyone's password
-    if (requester.role === Role.SUPER_ADMIN) {
-      return { password: target.password };
-    }
-
-    // ADMIN can only see USER passwords
-    if (
-      requester.role === Role.ADMIN &&
-      target.role === Role.USER
-    ) {
-      return { password: target.password };
-    }
-
-    throw new ForbiddenException('Cannot view this password');
-  }
-
   async getUserStudents(requesterId: number, targetId: number) {
     const requester = await this.prisma.user.findUniqueOrThrow({
       where: { id: requesterId },

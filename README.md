@@ -229,16 +229,6 @@ PostgreSQL，通过 Prisma ORM 管理，模型定义在 `packages/backend/prisma
 - 下载接口直接流式返回文件，绕过全局 JSON 响应拦截器；前端用 Blob + 鉴权头触发浏览器下载。
 - 备份 / 恢复仅对 `SUPER_ADMIN`、`ADMIN` 开放。
 
-API 一览：
-
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| POST | `/api/backup` | 创建备份 |
-| GET | `/api/backup/list` | 备份列表 |
-| GET | `/api/backup/download/:name` | 下载备份文件 |
-| DELETE | `/api/backup/:name` | 删除备份 |
-| POST | `/api/backup/restore` | 上传 .sql 并恢复（multipart `file` 字段） |
-
 ## 认证系统
 
 采用 JWT 双令牌认证 + 角色权限控制。

@@ -44,7 +44,7 @@
     <el-drawer
       v-model="drawerVisible"
       :title="selectedDate + ' 上课计划'"
-      size="550px"
+      size="min(700px, 100%)"
       @close="selectedDate = ''"
     >
       <div v-for="(group, name) in studentGroups" :key="name" class="student-group">
@@ -81,7 +81,7 @@
     <el-drawer
       v-model="studentDrawerVisible"
       :title="studentDrawerTitle"
-      size="700px"
+      size="min(700px, 100%)"
     >
       <div v-if="studentDetail" class="drawer-student-info">
         <div class="info-line"><span class="info-label">家长</span><span>{{ studentDetail.parentName }}</span></div>
@@ -379,7 +379,7 @@ onMounted(() => {
     margin: 4px 0;
   }
 
-  .hours-line { gap: 16px; }
+  .hours-line { gap: 16px; flex-wrap: wrap; }
 
   b { color: #303133; }
 }

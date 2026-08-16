@@ -52,14 +52,6 @@
           <el-button size="small" @click="editUser(row)">编辑</el-button>
           <el-button size="small" type="danger" @click="handleDelete(row)">删除</el-button>
           <el-button
-            v-if="canViewPwd(row)"
-            size="small"
-            type="info"
-            @click="handleViewPassword(row)"
-          >
-            密码
-          </el-button>
-          <el-button
             v-if="row.role === 'USER' && row.phone"
             size="small"
             type="success"
@@ -182,12 +174,6 @@
       </el-table>
       <el-empty v-if="!studentsLoading && !viewStudents.length" description="暂无关联学生" />
     </el-dialog>
-
-    <!-- 查看密码弹窗 -->
-    <el-dialog v-model="pwdDialogVisible" title="密码" width="360px">
-      <p v-if="pwdLoading">加载中...</p>
-      <p v-else><strong>密码哈希：</strong> {{ pwdHash }}</p>
-    </el-dialog>
   </div>
 </template>
 
@@ -218,13 +204,6 @@ function roleTag(role: string) {
     case 'ADMIN': return 'warning'
     default: return 'info'
   }
-}
-
-function canViewPwd(row: UserInfo) {
-  const role = currentUser.value?.role
-  if (role === 'SUPER_ADMIN') return true
-  if (role === 'ADMIN' && row.role === 'USER') return true
-  return false
 }
 
 // ── 用户列表 + 搜索 ────────────────────────────────────────
@@ -446,23 +425,6 @@ async function handleViewStudents(row: UserInfo) {
     viewStudents.value = res || []
   } catch { /* handled */ } finally {
     studentsLoading.value = false
-  }
-}
-
-// ── 查看密码 ──────────────────────────────────────────────
-const pwdDialogVisible = ref(false)
-const pwdHash = ref('')
-const pwdLoading = ref(false)
-
-async function handleViewPassword(row: UserInfo) {
-  pwdDialogVisible.value = true
-  pwdLoading.value = true
-  pwdHash.value = ''
-  try {
-    const res: any = await request.get(`/users/${row.id}/password`)
-    pwdHash.value = res.password
-  } catch { /* handled */ } finally {
-    pwdLoading.value = false
   }
 }
 </script>

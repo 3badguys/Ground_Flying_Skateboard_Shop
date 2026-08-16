@@ -61,12 +61,4 @@ export class UserController {
   ) {
     return this.authService.getUserStudents(userId, id);
   }
-
-  @Get(':id/password')
-  getUserPassword(
-    @CurrentUser('id') userId: number,
-    @Param('id', ParseIntPipe) id: number,
-  ) {
-    return this.authService.getUserPassword(userId, id);
-  }
 }

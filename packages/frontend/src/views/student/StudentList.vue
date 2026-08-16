@@ -85,7 +85,7 @@
     <el-drawer
       v-model="drawerVisible"
       :title="selectedStudent?.name"
-      size="700px"
+      size="min(700px, 100%)"
       @close="selectedStudent = null"
     >
       <div v-if="selectedStudent" class="drawer-student-info">
@@ -296,6 +296,7 @@ onMounted(() => {
 
   .hours-line {
     gap: 16px;
+    flex-wrap: wrap;
   }
 
   .info-divider {
